@@ -21,16 +21,20 @@ function init(){
 }
 //associo tramite addEventListener la funzione al click del bottone
 function eventHandlers(){
-    btn_task.addEventListener("click", addtask);
+    btn_task.addEventListener("click", addtask)
 
 }
 //funzione per aggiungere task
 function addtask(){
+    if(campotask.value == "")
+    {
+        alert("scrivere almeno un task");
+    } else {
     arrayTask.push(campotask.value);
-    
     buildList();
     saveData ();
     clearForms();
+    }
 }
 //funzione per controllare gli item dallo storage locale e splittarli con una virgola
 function checkData(){
@@ -45,17 +49,23 @@ function checkData(){
         for (var i=0; i < arrayTask.length; i++){
             list += 
             "<li id='item' class='list-group-item d-flex justify-content-between align-items-center'>" + ' - ' +
-            arrayTask[i] +"<div class='btn-group'>" 
-            + '<button onclick="completeTask('+i+')" id="btn" class="success-btn badge rounded-pill bg-success pointer"> &check; </button>'
-            + '<button onclick="removetask('+i+')" class="remove-btn badge rounded-pill bg-danger pointer">X</button></div></li>';
+            arrayTask[i] +"<div class='btn-group align-self-md-center'>" 
+            + '<button onclick="completeTask('+i+')" id="btn" class="btn-md success-btn badge rounded-pill bg-success pointer"> &check; </button>'
+            + '<button onclick="removetask('+i+')" class="btn-md remove-btn badge rounded-pill bg-danger pointer">X</button></div></li>';
         }
-        elenco_task.innerHTML = list; 
-        taskCount();
+            elenco_task.innerHTML = list; 
+            taskCount();
     
-}
+     }
+
 //funzione per settare l'item in locale con localStorage
 function saveData(){
-    localStorage.setItem('task', arrayTask);
+        localStorage.setItem('task', arrayTask);
+}
+
+function resetList(){
+    localStorage.clear('task');
+    window.location.href = window.location.href;
 }
 
 //funzione per pulire il campo input
@@ -66,6 +76,7 @@ function clearForms(){
 //funzione per rimuovere l'elemento selezionato, salva i dati e ricostruisce la lista
 function removetask(id){
     arrayTask.splice(id, 1);
+    localStorage.clear('task');
     saveData();
     buildList();
     taskCount();
@@ -91,5 +102,10 @@ function completeTask() {
     var btn = document.getElementById("btn");
     btn.remove();        
 }
+
+//funzione per salvare in PDF o stampare
+  function printOrSave() {
+    window.print();
+  }
 
 
